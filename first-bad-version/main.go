@@ -1,40 +1,38 @@
 package main
 
-/**
- * Forward declaration of isBadVersion API.
- * @param   version   your guess about first bad version
- * @return 	 	      true if current version is bad
- *			          false if current version is good
- * func isBadVersion(version int) bool;
- */
+import "fmt"
 
-// It's a mock function
+// https://leetcode.com/problems/first-bad-version/
+
 func isBadVersion(version int) bool {
+	// ... (provided by leetcode)
 	return false
 }
 
 func firstBadVersion(n int) int {
-	// 題目為 1 ~ N
-	low := 1
-	high := n
+	lo, hi := 1, n
 
-	// 黃金交叉後代表查找結束, 迴圈退出
-	for low <= high {
-		mid := (low + high) / 2
+	if isBadVersion(1) {
+		return 1
+	}
 
-		// 先確認 mid 是否為 bad version
-		// 若是的話直接檢查本身是否是首位或是 mid -1 是否不為 bad version，若符合條件就代表找到答案了
-		// 若不是的話就再往前或往後找
-		if isBadVersion(mid) {
-			if mid == 1 || !isBadVersion(mid-1) {
-				return mid
+	for hi >= lo {
+		mi := (lo + hi) / 2
+
+		if isBadVersion(mi) {
+			if !isBadVersion(mi - 1) {
+				return mi
 			}
-			high = mid - 1
+
+			hi = mi - 1
 		} else {
-			low = mid + 1
+			lo = mi + 1
 		}
 	}
 
-	// 代表沒找到半個 bad version
 	return -1
+}
+
+func main() {
+	fmt.Println(firstBadVersion(5))
 }
