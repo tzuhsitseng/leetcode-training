@@ -1,17 +1,23 @@
 package main
 
-// Keyword: hash table
+import "fmt"
+
+// https://leetcode.com/problems/two-sum/
 
 func twoSum(nums []int, target int) []int {
 	records := map[int]int{}
-	for idx, val := range nums {
-		// 若有查到 target - nums[idx] 的 hash table, 代表當前的 idx 跟查找到的資料匹配
-		if v, ok := records[target-val]; ok {
-			return []int{v, idx}
-		}
 
-		// 有走訪過就紀錄起來, 往後走會用到
-		records[val] = idx
+	for i, v := range nums {
+		wanted := target - v
+		if r, ok := records[wanted]; ok {
+			return []int{r, i}
+		}
+		records[v] = i
 	}
+
 	return []int{-1, -1}
+}
+
+func main() {
+	fmt.Println(twoSum([]int{2, 7, 11, 15}, 9))
 }
