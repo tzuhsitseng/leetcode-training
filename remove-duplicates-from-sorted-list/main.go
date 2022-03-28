@@ -17,16 +17,36 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	ite := head
 
 	for ite != nil {
-		temp := ite.Next
+		tmp := ite.Next
 
-		// 將 temp 走到不相等為止
-		for temp != nil && temp.Val == ite.Val {
-			temp = temp.Next
+		for tmp != nil && tmp.Val == ite.Val {
+			tmp = tmp.Next
 		}
 
-		// 將當前 node 的 next 指到最新的 temp node，且將 iterator 移到最新 node 繼續往下走
-		ite.Next = temp
-		ite = temp
+		ite.Next = tmp
+		ite = ite.Next
 	}
+
 	return head
 }
+
+//func deleteDuplicates(head *ListNode) *ListNode {
+//	ite := head
+//
+//	for ite != nil {
+//		tmp := ite.Val
+//		subIte := ite.Next
+//
+//		for {
+//			if subIte == nil || tmp != subIte.Val {
+//				ite.Next = subIte
+//				break
+//			}
+//			subIte = subIte.Next
+//		}
+//
+//		ite = ite.Next
+//	}
+//
+//	return head
+//}
