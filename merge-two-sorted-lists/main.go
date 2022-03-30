@@ -1,12 +1,6 @@
 package main
 
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
+// https://leetcode.com/problems/merge-two-sorted-lists/
 
 type ListNode struct {
 	Val  int

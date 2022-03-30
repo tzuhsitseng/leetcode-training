@@ -1,12 +1,6 @@
 package main
 
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list/
 
 type ListNode struct {
 	Val  int
