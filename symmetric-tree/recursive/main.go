@@ -1,13 +1,6 @@
 package recursive
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/symmetric-tree
 
 type TreeNode struct {
 	Val   int
@@ -19,19 +12,21 @@ func isSymmetric(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	return check(root.Left, root.Right)
+	return checkSymmetric(root.Left, root.Right)
 }
 
-func check(l1, l2 *TreeNode) bool {
-	if l1 == nil && l2 == nil {
+func checkSymmetric(n1, n2 *TreeNode) bool {
+	if n1 == nil && n2 == nil {
 		return true
+	} else if n1 != nil && n2 == nil {
+		return false
+	} else if n1 == nil && n2 != nil {
+		return false
 	}
 
-	if l1 != nil && l2 != nil {
-		if l1.Val != l2.Val {
-			return false
-		}
-		return check(l1.Left, l2.Right) && check(l1.Right, l2.Left)
+	if n1.Val != n2.Val {
+		return false
 	}
-	return false
+
+	return checkSymmetric(n1.Left, n2.Right) && checkSymmetric(n1.Right, n2.Left)
 }

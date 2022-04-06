@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/symmetric-tree
 
 type TreeNode struct {
 	Val   int
@@ -15,37 +8,74 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+type TreeNodeQueue struct {
+	queue []*TreeNode
+}
+
+func NewTreeNodeQueue() *TreeNodeQueue {
+	return &TreeNodeQueue{
+		queue: make([]*TreeNode, 0),
+	}
+}
+
+func (q *TreeNodeQueue) enqueue(element *TreeNode) {
+	if q.queue == nil {
+		q.queue = make([]*TreeNode, 0)
+	}
+	q.queue = append(q.queue, element)
+}
+
+func (q *TreeNodeQueue) dequeue() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	q.queue = q.queue[1:]
+	return result
+}
+
+func (q *TreeNodeQueue) peek() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	return result
+}
+
+func (q *TreeNodeQueue) isEmpty() bool {
+	return len(q.queue) == 0
+}
+
 func isSymmetric(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	queue := enqueue(make([]*TreeNode, 0), root.Left, root.Right)
-	var l1, l2 *TreeNode
 
-	for len(queue) > 0 {
-		l1, queue = dequeue(queue)
-		l2, queue = dequeue(queue)
+	q := NewTreeNodeQueue()
+	q.enqueue(root.Left)
+	q.enqueue(root.Right)
 
-		if l1 == nil && l2 == nil {
+	for !q.isEmpty() {
+		n1 := q.dequeue()
+		n2 := q.dequeue()
+
+		if n1 == nil && n2 == nil {
 			continue
+		} else if n1 == nil && n2 != nil {
+			return false
+		} else if n1 != nil && n2 == nil {
+			return false
 		}
 
-		if l1 != nil && l2 != nil {
-			if l1.Val != l2.Val {
-				return false
-			}
-			queue = enqueue(queue, l1.Left, l2.Right, l1.Right, l2.Left)
-			continue
+		if n1.Val != n2.Val {
+			return false
 		}
-		return false
+
+		q.enqueue(n1.Left)
+		q.enqueue(n2.Right)
+		q.enqueue(n1.Right)
+		q.enqueue(n2.Left)
 	}
+
 	return true
-}
-
-func enqueue(queue []*TreeNode, elements ...*TreeNode) []*TreeNode {
-	return append(queue, elements...)
-}
-
-func dequeue(queue []*TreeNode) (*TreeNode, []*TreeNode) {
-	return queue[0], queue[1:]
 }
