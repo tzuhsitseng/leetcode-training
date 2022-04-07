@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/merge-two-binary-trees/
 
 type TreeNode struct {
 	Val   int
@@ -15,58 +8,83 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+type TreeNodeQueue struct {
+	queue []*TreeNode
+}
+
+func NewTreeNodeQueue() *TreeNodeQueue {
+	return &TreeNodeQueue{
+		queue: make([]*TreeNode, 0),
+	}
+}
+
+func (q *TreeNodeQueue) enqueue(element *TreeNode) {
+	if q.queue == nil {
+		q.queue = make([]*TreeNode, 0)
+	}
+	q.queue = append(q.queue, element)
+}
+
+func (q *TreeNodeQueue) dequeue() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	q.queue = q.queue[1:]
+	return result
+}
+
+func (q *TreeNodeQueue) peek() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	return result
+}
+
+func (q *TreeNodeQueue) isEmpty() bool {
+	return len(q.queue) == 0
+}
+
 func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 	if root1 == nil && root2 == nil {
 		return nil
-	}
-
-	if root1 != nil && root2 == nil {
+	} else if root1 == nil && root2 != nil {
+		return root2
+	} else if root1 != nil && root2 == nil {
 		return root1
 	}
 
-	if root1 == nil && root2 != nil {
-		return root2
-	}
+	q := NewTreeNodeQueue()
+	q.enqueue(root1)
+	q.enqueue(root2)
 
-	stack := push(make([]*TreeNode, 0), root1, root2)
-	var t1, t2 *TreeNode
+	for !q.isEmpty() {
+		n1 := q.dequeue()
+		n2 := q.dequeue()
 
-	for len(stack) > 0 {
-		t2, stack = pop(stack)
-		t1, stack = pop(stack)
-
-		if t2 == nil {
+		if n2 == nil {
 			continue
 		}
 
-		// 這時候代表 t2 也不為 nil
-		if t1 != nil {
-			t1.Val += t2.Val
+		if n1 != nil {
+			n1.Val += n2.Val
 
-			if t1.Left == nil {
-				t1.Left = t2.Left
+			if n1.Left == nil {
+				n1.Left = n2.Left
 			} else {
-				stack = push(stack, t1.Left, t2.Left)
+				q.enqueue(n1.Left)
+				q.enqueue(n2.Left)
 			}
 
-			if t1.Right == nil {
-				t1.Right = t2.Right
+			if n1.Right == nil {
+				n1.Right = n2.Right
 			} else {
-				stack = push(stack, t1.Right, t2.Right)
+				q.enqueue(n1.Right)
+				q.enqueue(n2.Right)
 			}
 		}
 	}
+
 	return root1
-}
-
-func push(stack []*TreeNode, elements ...*TreeNode) []*TreeNode {
-	return append(stack, elements...)
-}
-
-func pop(stack []*TreeNode) (*TreeNode, []*TreeNode) {
-	l := len(stack)
-	if l > 0 {
-		return stack[l-1], stack[:l-1]
-	}
-	return nil, nil
 }
