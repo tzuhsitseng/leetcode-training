@@ -1,13 +1,8 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+import "fmt"
+
+// https://leetcode.com/problems/binary-tree-inorder-traversal/
 
 type TreeNode struct {
 	Val   int
@@ -15,31 +10,73 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func inorderTraversal(root *TreeNode) []int {
-	result := make([]int, 0)
-	stack := make([]*TreeNode, 0)
-	iter := root
+type TreeNodeStack struct {
+	stack []*TreeNode
+}
 
-	for len(stack) > 0 || iter != nil {
-		for iter != nil {
-			stack = push(stack, iter)
-			iter = iter.Left
-		}
-		iter, stack = pop(stack)
-		result = append(result, iter.Val)
-		iter = iter.Right
+func NewTreeNodeStack() *TreeNodeStack {
+	return &TreeNodeStack{
+		stack: make([]*TreeNode, 0),
 	}
+}
+
+func (s *TreeNodeStack) push(element *TreeNode) {
+	if s.stack == nil {
+		s.stack = make([]*TreeNode, 0)
+	}
+	s.stack = append(s.stack, element)
+}
+
+func (s *TreeNodeStack) pop() *TreeNode {
+	if s.isEmpty() {
+		return nil
+	}
+
+	l := len(s.stack)
+	result := s.stack[l-1]
+	s.stack = s.stack[:l-1]
 	return result
 }
 
-func push(stack []*TreeNode, elements ...*TreeNode) []*TreeNode {
-	return append(stack, elements...)
+func (s *TreeNodeStack) isEmpty() bool {
+	return len(s.stack) == 0
 }
 
-func pop(stack []*TreeNode) (*TreeNode, []*TreeNode) {
-	l := len(stack)
-	if l > 0 {
-		return stack[l-1], stack[:l-1]
+func (s *TreeNodeStack) peek() *TreeNode {
+	if s.isEmpty() {
+		return nil
 	}
-	return nil, nil
+
+	return s.stack[len(s.stack)-1]
+}
+
+func inorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+
+	result := make([]int, 0)
+	stack := NewTreeNodeStack()
+	cur := root
+
+	for cur != nil || !stack.isEmpty() {
+		for cur != nil {
+			stack.push(cur)
+			cur = cur.Left
+		}
+
+		cur = stack.pop()
+
+		if cur != nil {
+			result = append(result, cur.Val)
+			cur = cur.Right
+		}
+	}
+
+	return result
+}
+
+func main() {
+	t := &TreeNode{Val: 1}
+	fmt.Println(inorderTraversal(t))
 }

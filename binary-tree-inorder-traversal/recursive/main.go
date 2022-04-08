@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/binary-tree-inorder-traversal/
 
 type TreeNode struct {
 	Val   int
@@ -16,16 +9,26 @@ type TreeNode struct {
 }
 
 func inorderTraversal(root *TreeNode) []int {
-	result := make([]int, 0)
-	return dfs(root, result)
+	return travelByDFS(root, make([]int, 0))
 }
 
-func dfs(root *TreeNode, result []int) []int {
-	if root == nil {
+func travelByDFS(n *TreeNode, result []int) []int {
+	if n == nil {
 		return result
 	}
-	result = dfs(root.Left, result)
-	result = append(result, root.Val)
-	result = dfs(root.Right, result)
+
+	// left
+	if n.Left != nil {
+		result = travelByDFS(n.Left, result)
+	}
+
+	// middle
+	result = append(result, n.Val)
+
+	// right
+	if n.Right != nil {
+		result = travelByDFS(n.Right, result)
+	}
+
 	return result
 }
