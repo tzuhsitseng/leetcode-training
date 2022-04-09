@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/search-in-a-binary-search-tree/
 
 type TreeNode struct {
 	Val   int
@@ -16,16 +9,19 @@ type TreeNode struct {
 }
 
 func searchBST(root *TreeNode, val int) *TreeNode {
-	iter := root
+	if root == nil {
+		return nil
+	}
 
-	for iter != nil {
-		if val == iter.Val {
-			return iter
-		}
-		if val < iter.Val {
-			iter = iter.Left
+	curr := root
+
+	for curr != nil {
+		if curr.Val == val {
+			return curr
+		} else if val < curr.Val {
+			curr = curr.Left
 		} else {
-			iter = iter.Right
+			curr = curr.Right
 		}
 	}
 
