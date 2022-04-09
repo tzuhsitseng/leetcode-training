@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/same-tree/
 
 type TreeNode struct {
 	Val   int

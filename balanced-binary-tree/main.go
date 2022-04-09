@@ -2,14 +2,7 @@ package main
 
 import "math"
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/balanced-binary-tree/
 
 type TreeNode struct {
 	Val   int

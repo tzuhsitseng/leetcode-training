@@ -2,6 +2,8 @@ package main
 
 import "math"
 
+// https://leetcode.com/problems/house-robber/
+
 func rob(nums []int) int {
 	size := len(nums)
 	if size == 0 {
