@@ -1,5 +1,7 @@
 package main
 
+// https://leetcode.com/problems/sort-an-array/
+
 import (
 	"sort"
 )
@@ -34,9 +36,9 @@ func builtInSort(nums []int) []int {
 }
 
 func bubbleSort(nums []int) []int {
-	l := len(nums)
-	for i := 0; i < l; i++ {
-		for j := 0; j < l-1-i; j++ {
+	size := len(nums)
+	for i := 0; i < size; i++ {
+		for j := 0; j < size-i-1; j++ {
 			if nums[j] > nums[j+1] {
 				nums[j], nums[j+1] = nums[j+1], nums[j]
 			}
@@ -47,17 +49,21 @@ func bubbleSort(nums []int) []int {
 
 func bucketSort(nums []int) []int {
 	bucket := make([]int, 100001)
+
 	for _, v := range nums {
 		bucket[v+50000] += 1
 	}
-	i := 0
-	for j := range nums {
+
+	i, j := 0, 0
+	for j = range nums {
 		for bucket[i] == 0 {
 			i++
 		}
+
 		nums[j] = i - 50000
 		bucket[i]--
 	}
+
 	return nums
 }
 
