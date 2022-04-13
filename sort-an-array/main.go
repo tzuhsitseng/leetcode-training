@@ -3,11 +3,17 @@ package main
 // https://leetcode.com/problems/sort-an-array/
 
 import (
+	"fmt"
 	"sort"
 )
 
+func main() {
+	d := []int{5, 2, 3, 1}
+	fmt.Println(sortArray(d))
+}
+
 func sortArray(nums []int) []int {
-	n := 5 // choose the case you want
+	n := 4 // choose the case you want
 
 	switch n {
 	case 1:
@@ -68,37 +74,39 @@ func bucketSort(nums []int) []int {
 }
 
 func mergeSort(nums []int) []int {
-	if len(nums) > 1 {
-		mid := len(nums) / 2
-		l := nums[:mid]
-		r := nums[mid:]
-		l = mergeSort(l)
-		r = mergeSort(r)
-		i, j := 0, 0
-		res := make([]int, 0)
+	if len(nums) == 0 || len(nums) == 1 {
+		return nums
+	}
 
-		for i < len(l) && j < len(r) {
-			if l[i] < r[j] {
-				res = append(res, l[i])
-				i++
-			} else {
-				res = append(res, r[j])
-				j++
-			}
-		}
+	result := make([]int, 0, len(nums))
+	mid := len(nums) / 2
+	left := nums[:mid]
+	right := nums[mid:]
+	left = mergeSort(left)
+	right = mergeSort(right)
 
-		for i < len(l) {
-			res = append(res, l[i])
+	i, j := 0, 0
+
+	for i < len(left) && j < len(right) {
+		if left[i] < right[j] {
+			result = append(result, left[i])
 			i++
-		}
-
-		for j < len(r) {
-			res = append(res, r[j])
+		} else {
+			result = append(result, right[j])
 			j++
 		}
-		return res
 	}
-	return nums
+
+	for i < len(left) {
+		result = append(result, left[i])
+		i++
+	}
+	for j < len(right) {
+		result = append(result, right[j])
+		j++
+	}
+
+	return result
 }
 
 func quickSort(nums []int) []int {
