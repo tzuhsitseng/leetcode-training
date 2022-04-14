@@ -13,7 +13,7 @@ func main() {
 }
 
 func sortArray(nums []int) []int {
-	n := 4 // choose the case you want
+	n := 5 // choose the case you want
 
 	switch n {
 	case 1:
@@ -115,24 +115,26 @@ func quickSort(nums []int) []int {
 }
 
 func doQuickSort(nums []int, left, right int) {
-	if left >= right {
+	if len(nums) == 0 || len(nums) == 1 {
 		return
 	}
-	if left+1 == right && nums[right] >= nums[left] {
-		return
-	}
-	pivot := nums[left] // choose the left node as pivot
-	l, r := left, right
 
-	// partitioning
-	for l <= r {
-		for l <= r && nums[l] < pivot {
+	if right <= left {
+		return
+	}
+
+	l, r := left, right
+	m := (right-left)/2 + left
+	pilot := nums[m]
+
+	for r >= l {
+		for r >= l && nums[l] < pilot {
 			l++
 		}
-		for l <= r && nums[r] > pivot {
+		for r >= l && nums[r] > pilot {
 			r--
 		}
-		if l <= r {
+		if r >= l {
 			nums[l], nums[r] = nums[r], nums[l]
 			l++
 			r--
@@ -141,5 +143,4 @@ func doQuickSort(nums []int, left, right int) {
 
 	doQuickSort(nums, left, r)
 	doQuickSort(nums, l, right)
-	return
 }
