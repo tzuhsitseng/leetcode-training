@@ -9,27 +9,21 @@ func isAnagram(s string, t string) bool {
 		return false
 	}
 
-	counter := map[rune]int{}
+	counterS := map[uint8]int{}
+	counterT := map[uint8]int{}
 
-	for _, c := range s {
-		if _, ok := counter[c]; ok {
-			counter[c]++
-		} else {
-			counter[c] = 1
-		}
+	for i := range s {
+		counterS[s[i]] += 1
+		counterT[t[i]] += 1
 	}
 
-	for _, c := range t {
-		if _, ok := counter[c]; !ok {
+	for k := range counterS {
+		if counterS[k] != counterT[k] {
 			return false
 		}
-		counter[c]--
-		if counter[c] == 0 {
-			delete(counter, c)
-		}
 	}
 
-	return len(counter) == 0
+	return true
 }
 
 func main() {
