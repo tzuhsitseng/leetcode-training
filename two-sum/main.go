@@ -5,17 +5,22 @@ import "fmt"
 // https://leetcode.com/problems/two-sum/
 
 func twoSum(nums []int, target int) []int {
-	records := map[int]int{}
-
-	for i, v := range nums {
-		wanted := target - v
-		if r, ok := records[wanted]; ok {
-			return []int{r, i}
-		}
-		records[v] = i
+	if len(nums) == 0 || len(nums) == 1 {
+		return nil
 	}
 
-	return []int{-1, -1}
+	m := map[int]int{}
+
+	for i, v := range nums {
+		if idx, ok := m[v]; ok {
+			return []int{idx, i}
+		}
+
+		wanted := target - v
+		m[wanted] = i
+	}
+
+	return nil
 }
 
 func main() {
