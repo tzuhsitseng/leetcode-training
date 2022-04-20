@@ -10,21 +10,32 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func isBalanced(root *TreeNode) bool {
-	return getDepth(root) != -1
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
-func getDepth(node *TreeNode) int {
-	if node == nil {
+func isBalanced(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+
+	return dfs(root) != -1
+}
+
+func dfs(root *TreeNode) int {
+	if root == nil {
 		return 0
 	}
 
-	left := getDepth(node.Left)
-	right := getDepth(node.Right)
+	left := dfs(root.Left)
+	right := dfs(root.Right)
 
 	if left == -1 || right == -1 || math.Abs(float64(left-right)) > 1 {
 		return -1
 	}
 
-	return 1 + int(math.Max(float64(left), float64(right)))
+	return 1 + max(left, right)
 }
