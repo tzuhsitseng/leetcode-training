@@ -1,13 +1,6 @@
 package main
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+// https://leetcode.com/problems/binary-tree-level-order-traversal/
 
 type TreeNode struct {
 	Val   int
@@ -15,35 +8,71 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func levelOrder(root *TreeNode) [][]int {
-	result := make([][]int, 0)
-	if root == nil {
-		return result
-	}
-	queue := []*TreeNode{root}
-	var curr *TreeNode
+type TreeNodeQueue struct {
+	queue []*TreeNode
+}
 
-	for len(queue) > 0 {
-		temp := make([]int, 0)
-		for range queue {
-			curr, queue = dequeue(queue)
-			temp = append(temp, curr.Val)
-			if curr.Left != nil {
-				queue = enqueue(queue, curr.Left)
-			}
-			if curr.Right != nil {
-				queue = enqueue(queue, curr.Right)
-			}
-		}
-		result = append(result, temp)
+func NewTreeNodeQueue() *TreeNodeQueue {
+	return &TreeNodeQueue{
+		queue: make([]*TreeNode, 0),
 	}
+}
+
+func (q *TreeNodeQueue) enqueue(element *TreeNode) {
+	if q.queue == nil {
+		q.queue = make([]*TreeNode, 0)
+	}
+	q.queue = append(q.queue, element)
+}
+
+func (q *TreeNodeQueue) dequeue() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	q.queue = q.queue[1:]
 	return result
 }
 
-func enqueue(queue []*TreeNode, elements ...*TreeNode) []*TreeNode {
-	return append(queue, elements...)
+func (q *TreeNodeQueue) peek() *TreeNode {
+	if len(q.queue) == 0 {
+		return nil
+	}
+	result := q.queue[0]
+	return result
 }
 
-func dequeue(queue []*TreeNode) (*TreeNode, []*TreeNode) {
-	return queue[0], queue[1:]
+func (q *TreeNodeQueue) isEmpty() bool {
+	return len(q.queue) == 0
+}
+
+func levelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+
+	res := make([][]int, 0)
+	q := NewTreeNodeQueue()
+	q.enqueue(root)
+
+	for !q.isEmpty() {
+		items := make([]*TreeNode, 0)
+		values := make([]int, 0)
+		for !q.isEmpty() {
+			item := q.dequeue()
+			items = append(items, item)
+			values = append(values, item.Val)
+		}
+		for _, v := range items {
+			if v.Left != nil {
+				q.enqueue(v.Left)
+			}
+			if v.Right != nil {
+				q.enqueue(v.Right)
+			}
+		}
+		res = append(res, values)
+	}
+
+	return res
 }
