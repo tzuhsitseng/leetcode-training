@@ -1,70 +1,65 @@
 package main
 
-/**
- * Your Trie object will be instantiated and called as such:
- * obj := Constructor();
- * obj.Insert(word);
- * param_2 := obj.Search(word);
- * param_3 := obj.StartsWith(prefix);
- */
+// https://leetcode.com/problems/implement-trie-prefix-tree/
 
 type Trie struct {
-	nodes map[string]*Trie
+	nodes map[rune]*Trie
 }
 
-/** Initialize your data structure here. */
 func Constructor() Trie {
-	return Trie{nodes: map[string]*Trie{}}
+	return Trie{nodes: map[rune]*Trie{}}
 }
 
-/** Inserts a word into the trie. */
 func (this *Trie) Insert(word string) {
-	curr := this
-	for _, v := range word {
-		c := string(v)
-		if curr.nodes == nil {
-			curr.nodes = map[string]*Trie{}
+	iter := this
+
+	for _, c := range word {
+		if iter.nodes == nil {
+			iter.nodes = map[rune]*Trie{}
 		}
-		if _, ok := curr.nodes[c]; !ok {
-			curr.nodes[c] = &Trie{}
+		if _, ok := iter.nodes[c]; !ok {
+			iter.nodes[c] = &Trie{}
 		}
-		curr = curr.nodes[c]
+		iter = iter.nodes[c]
 	}
-	if curr.nodes == nil {
-		curr.nodes = map[string]*Trie{}
+
+	if iter.nodes == nil {
+		iter.nodes = map[rune]*Trie{}
 	}
-	curr.nodes["#"] = &Trie{}
+	if _, ok := iter.nodes['#']; !ok {
+		iter.nodes['#'] = &Trie{}
+	}
 }
 
-/** Returns if the word is in the trie. */
 func (this *Trie) Search(word string) bool {
-	curr := this
-	for _, v := range word {
-		c := string(v)
-		if curr.nodes == nil {
+	iter := this
+
+	for _, c := range word {
+		if len(iter.nodes) == 0 {
 			return false
 		}
-		if _, ok := curr.nodes[c]; !ok {
+		if _, ok := iter.nodes[c]; !ok {
 			return false
 		}
-		curr = curr.nodes[c]
+		iter = iter.nodes[c]
 	}
-	_, ok := curr.nodes["#"]
+
+	_, ok := iter.nodes['#']
 	return ok
 }
 
-/** Returns if there is any word in the trie that starts with the given prefix. */
 func (this *Trie) StartsWith(prefix string) bool {
-	curr := this
-	for _, v := range prefix {
-		c := string(v)
-		if curr.nodes == nil {
+	iter := this
+
+	for _, c := range prefix {
+		if len(iter.nodes) == 0 {
 			return false
 		}
-		if _, ok := curr.nodes[c]; !ok {
+		if _, ok := iter.nodes[c]; !ok {
 			return false
 		}
-		curr = curr.nodes[c]
+		iter = iter.nodes[c]
 	}
+
 	return true
 }
