@@ -45,30 +45,60 @@ func (q *NodeQueue) isEmpty() bool {
 	return len(q.queue) == 0
 }
 
+//func cloneGraph(node *Node) *Node {
+//	if node == nil {
+//		return nil
+//	}
+//
+//	result := map[int]*Node{}
+//	result[node.Val] = &Node{Val: node.Val}
+//	q := NewNodeQueue()
+//	q.enqueue(node)
+//
+//	for !q.isEmpty() {
+//		n := q.dequeue()
+//		newNei := make([]*Node, 0, len(n.Neighbors))
+//
+//		for _, v := range n.Neighbors {
+//			if _, ok := result[v.Val]; !ok {
+//				q.enqueue(v)
+//				result[v.Val] = &Node{Val: v.Val}
+//			}
+//			newNei = append(newNei, result[v.Val])
+//		}
+//
+//		result[n.Val].Neighbors = newNei
+//	}
+//
+//	return result[1]
+//}
+
+// --
+// The following solution is a dfs version
+
 func cloneGraph(node *Node) *Node {
 	if node == nil {
 		return nil
 	}
 
-	result := map[int]*Node{}
-	result[node.Val] = &Node{Val: node.Val}
-	q := NewNodeQueue()
-	q.enqueue(node)
+	visited := map[int]*Node{}
+	var clone func(*Node) *Node
 
-	for !q.isEmpty() {
-		n := q.dequeue()
-		newNei := make([]*Node, 0, len(n.Neighbors))
-
-		for _, v := range n.Neighbors {
-			if _, ok := result[v.Val]; !ok {
-				q.enqueue(v)
-				result[v.Val] = &Node{Val: v.Val}
-			}
-			newNei = append(newNei, result[v.Val])
+	clone = func(n *Node) *Node {
+		if v, ok := visited[n.Val]; ok {
+			return v
 		}
 
-		result[n.Val].Neighbors = newNei
+		newNode := &Node{Val: n.Val}
+
+		for _, v := range n.Neighbors {
+			newNei := clone(v)
+			newNode.Neighbors = append(newNode.Neighbors, newNei)
+		}
+
+		visited[n.Val] = newNode
+		return newNode
 	}
 
-	return result[1]
+	return clone(node)
 }
