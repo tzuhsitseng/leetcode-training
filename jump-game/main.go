@@ -1,16 +1,26 @@
 package main
 
-import (
-	"math"
-)
+// https://leetcode.com/problems/jump-game/
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
 
 func canJump(nums []int) bool {
-	farest := 0
-	for i, v := range nums {
-		if i > farest {
+	if len(nums) == 0 {
+		return false
+	}
+
+	furthest := 0
+
+	for i := 0; i < len(nums); i++ {
+		if furthest < i {
 			return false
 		}
-		farest = int(math.Max(float64(farest), float64(i+v)))
+		furthest = max(furthest, i+nums[i])
 	}
 	return true
 }
