@@ -1,35 +1,38 @@
 package main
 
-import "math"
-
 // https://leetcode.com/problems/house-robber-ii/
 
-func rob(nums []int) int {
-	size := len(nums)
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
 
-	if size == 0 {
+func rob(nums []int) int {
+	length := len(nums)
+
+	if length == 0 {
 		return 0
 	}
-
-	if size == 1 {
+	if length == 1 {
 		return nums[0]
 	}
 
-	// case 1: steal from the 0
-	robbedFromFirst := make([]int, size)
-	robbedFromFirst[0] = nums[0]
-	robbedFromFirst[1] = nums[0]
-	for i := 2; i < size-1; i++ {
-		robbedFromFirst[i] = int(math.Max(float64(robbedFromFirst[i-1]), float64(robbedFromFirst[i-2]+nums[i])))
+	dp1 := make([]int, length)
+	dp2 := make([]int, length)
+
+	dp1[0] = nums[0]
+	dp1[1] = dp1[0]
+	for i := 2; i < length-1; i++ {
+		dp1[i] = max(dp1[i-1], dp1[i-2]+nums[i])
 	}
 
-	// case 2: steal from the 1
-	robbedFromSecond := make([]int, size)
-	robbedFromSecond[0] = 0
-	robbedFromSecond[1] = nums[1]
-	for i := 2; i < size; i++ {
-		robbedFromSecond[i] = int(math.Max(float64(robbedFromSecond[i-1]), float64(robbedFromSecond[i-2]+nums[i])))
+	dp2[0] = 0
+	dp2[1] = nums[1]
+	for i := 2; i < length; i++ {
+		dp2[i] = max(dp2[i-1], dp2[i-2]+nums[i])
 	}
 
-	return int(math.Max(float64(robbedFromFirst[size-2]), float64(robbedFromSecond[size-1])))
+	return max(dp1[length-2], dp2[length-1])
 }
