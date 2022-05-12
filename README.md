@@ -1,1 +1,1 @@
-# leetcode-training-go
+# leetcode-training
