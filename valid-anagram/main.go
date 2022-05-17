@@ -5,20 +5,23 @@ import "fmt"
 // https://leetcode.com/problems/valid-anagram/
 
 func isAnagram(s string, t string) bool {
-	if len(s) != len(t) {
-		return false
+	sc, tc := map[rune]int{}, map[rune]int{}
+
+	for _, c := range s {
+		sc[c]++
+	}
+	for _, c := range t {
+		tc[c]++
 	}
 
-	counterS := map[uint8]int{}
-	counterT := map[uint8]int{}
-
-	for i := range s {
-		counterS[s[i]] += 1
-		counterT[t[i]] += 1
+	for k := range sc {
+		if sc[k] != tc[k] {
+			return false
+		}
+		delete(tc, k)
 	}
-
-	for k := range counterS {
-		if counterS[k] != counterT[k] {
+	for k := range tc {
+		if tc[k] != sc[k] {
 			return false
 		}
 	}
