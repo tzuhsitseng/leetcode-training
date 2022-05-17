@@ -5,25 +5,27 @@ import "fmt"
 // https://leetcode.com/problems/group-anagrams/
 
 func groupAnagrams(strs []string) [][]string {
-	m := map[string][]string{}
+	gm := map[string][]string{}
 
 	for _, str := range strs {
-		counter := [26]int{}
+		m := map[rune]int{}
 
 		for _, c := range str {
-			idx := int(c) - int('a')
-			counter[idx]++
+			m[c]++
 		}
 
-		key := fmt.Sprint(counter)
-		m[key] = append(m[key], str)
+		key := fmt.Sprint(m)
+		if _, ok := gm[key]; ok {
+			gm[key] = append(gm[key], str)
+		} else {
+			gm[key] = []string{str}
+		}
 	}
 
-	result := make([][]string, 0, len(m))
-
-	for _, v := range m {
-		result = append(result, v)
+	res := make([][]string, 0, len(gm))
+	for _, s := range gm {
+		res = append(res, s)
 	}
 
-	return result
+	return res
 }
