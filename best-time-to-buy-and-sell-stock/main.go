@@ -2,25 +2,28 @@ package main
 
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 
-func maxProfit(prices []int) int {
-	if len(prices) == 0 || len(prices) == 1 {
-		return 0
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
+	return b
+}
 
+func maxProfit(prices []int) int {
+	iSize := len(prices)
+
+	res := 0
 	l, r := 0, 1
-	result := 0
 
-	for r < len(prices) {
-		if prices[r] < prices[l] {
+	for r < iSize {
+		if prices[l] < prices[r] {
 			l, r = r, r+1
 			continue
 		}
 
-		if p := prices[r] - prices[l]; p > result {
-			result = p
-		}
+		res = max(res, prices[r]-prices[l])
 		r++
 	}
 
-	return result
+	return res
 }
