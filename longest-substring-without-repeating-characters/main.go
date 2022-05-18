@@ -1,7 +1,5 @@
 package main
 
-import "strings"
-
 // https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
 func max(a, b int) int {
@@ -12,25 +10,21 @@ func max(a, b int) int {
 }
 
 func lengthOfLongestSubstring(s string) int {
-	if s == "" {
-		return 0
-	}
-
-	left, right := 0, 0
-	sub := ""
 	res := 0
+	l, r := 0, 0
+	m := map[uint8]bool{}
 
-	for right < len(s) {
-		if strings.Contains(sub, string(s[right])) {
-			res = max(res, len(sub))
-			sub = ""
-			left, right = left+1, left+1
+	for r < len(s) {
+		if m[s[r]] {
+			res = max(res, r-l)
+			m = map[uint8]bool{}
+			l, r = l+1, l+1
 		} else {
-			sub = s[left : right+1]
-			right++
+			m[s[r]] = true
+			r++
 		}
 	}
 
-	res = max(res, len(sub))
+	res = max(res, r-l)
 	return res
 }
