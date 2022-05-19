@@ -20,23 +20,26 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	iter := dummy
 
 	for l1 != nil && l2 != nil {
-		if l2.Val > l1.Val {
-			iter.Next = l1
-			l1 = l1.Next
-		} else {
+		if l1.Val > l2.Val {
 			iter.Next = l2
 			l2 = l2.Next
+		} else {
+			iter.Next = l1
+			l1 = l1.Next
 		}
-
 		iter = iter.Next
 	}
 
-	if l1 != nil {
+	for l1 != nil {
 		iter.Next = l1
-	} else if l2 != nil {
+		l1 = l1.Next
+		iter = iter.Next
+	}
+	for l2 != nil {
 		iter.Next = l2
+		l2 = l2.Next
+		iter = iter.Next
 	}
 
-	result := dummy.Next
-	return result
+	return dummy.Next
 }
