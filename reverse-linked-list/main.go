@@ -9,20 +9,20 @@ type ListNode struct {
 
 func reverseList(head *ListNode) *ListNode {
 	if head == nil {
-		return head
+		return nil
 	}
 
-	var result *ListNode
+	var res *ListNode
 	iter := head
 
 	for iter != nil {
-		next := iter.Next
-		iter.Next = result
-		result = iter
-		iter = next
+		tmp := iter.Next
+		iter.Next = res
+		res = iter
+		iter = tmp
 	}
 
-	return result
+	return res
 }
 
 // the following is recursive version
