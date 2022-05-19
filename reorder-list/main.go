@@ -8,46 +8,41 @@ type ListNode struct {
 }
 
 func reorderList(head *ListNode) {
-	if head == nil || head.Next == nil {
+	if head.Next == nil {
 		return
 	}
 
-	slow, fast := head, head
-
 	var prev *ListNode
-	for fast != nil && fast.Next != nil {
-		prev = slow
-		slow = slow.Next
-		fast = fast.Next.Next
+	s, f := head, head
+	for f != nil && f.Next != nil {
+		prev = s
+		s = s.Next
+		f = f.Next.Next
 	}
+
+	// cut input in half
 	prev.Next = nil
+	l1 := head
 
-	var secondHalf *ListNode
-	iter := slow
-	for iter != nil {
-		tmp := iter.Next
-		iter.Next = secondHalf
-		secondHalf = iter
-		iter = tmp
+	// reverse l2
+	var l2 *ListNode
+	for s != nil {
+		tmp := s.Next
+		s.Next = l2
+		l2 = s
+		s = tmp
 	}
 
-	iter = head
-	sIter := secondHalf
-	sPrev := sIter
-
-	for iter != nil && sIter != nil {
-		tmp := iter.Next
-		rTmp := sIter.Next
-		iter.Next = sIter
-		sIter.Next = tmp
-		sPrev = sIter
-		iter = tmp
-		sIter = rTmp
+	for l1 != nil && l2 != nil {
+		prev = l2
+		nxt1, nxt2 := l1.Next, l2.Next
+		l1.Next = l2
+		l2.Next = nxt1
+		l1 = nxt1
+		l2 = nxt2
 	}
-
-	// 在 nodes 為單數的情境下，在 second half 的部分會剩下一個 e.g. [1, 2, 3, 4, 5]
-	if sIter != nil {
-		sPrev.Next = sIter
+	if l2 != nil {
+		prev.Next = l2
 	}
 }
 
