@@ -8,36 +8,25 @@ type ListNode struct {
 }
 
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
-	if head == nil || head.Next == nil {
-		return nil
+	l, r := head, head
+	for i := 0; i < n; i++ {
+		r = r.Next
 	}
 
-	size := 0
-	iter := head
-	for iter != nil {
-		size++
-		iter = iter.Next
+	var prev *ListNode
+	for r != nil {
+		prev = l
+		l = l.Next
+		r = r.Next
 	}
 
-	target := size - n + 1
-	dummy := &ListNode{}
-	dummy.Next = head
-	iter = dummy
-	prev := iter
-	i := 0
-
-	for iter != nil {
-		if i == target {
-			prev.Next = iter.Next
-			break
-		}
-
-		prev = iter
-		iter = iter.Next
-		i++
+	if prev == nil { // means the first element should be removed
+		head = head.Next
+	} else {
+		prev.Next = l.Next
 	}
 
-	return dummy.Next
+	return head
 }
 
 // --
