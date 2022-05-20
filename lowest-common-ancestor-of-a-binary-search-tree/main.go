@@ -10,6 +10,7 @@ type TreeNode struct {
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	iter := root
+
 	for iter != nil {
 		if p.Val > iter.Val && q.Val > iter.Val {
 			iter = iter.Right
@@ -18,7 +19,7 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 		} else {
 			return iter
 		}
-
 	}
+
 	return nil
 }
