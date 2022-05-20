@@ -16,24 +16,18 @@ func max(a, b int) int {
 }
 
 func diameterOfBinaryTree(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
+	res := 0
 
-	var currMax int
-	var dfs func(root *TreeNode) int
-
-	dfs = func(root *TreeNode) int {
-		if root == nil {
+	var dfs func(n *TreeNode) int
+	dfs = func(n *TreeNode) int {
+		if n == nil {
 			return 0
 		}
-
-		left := dfs(root.Left)
-		right := dfs(root.Right)
-		currMax = max(currMax, left+right)
-		return 1 + max(left, right)
+		l, r := dfs(n.Left), dfs(n.Right)
+		res = max(res, l+r)
+		return 1 + max(l, r)
 	}
 
 	dfs(root)
-	return currMax
+	return res
 }
