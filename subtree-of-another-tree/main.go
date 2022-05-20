@@ -9,30 +9,27 @@ type TreeNode struct {
 }
 
 func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
-	if subRoot == nil {
-		return true
+	var dfs func(n *TreeNode) bool
+
+	dfs = func(n *TreeNode) bool {
+		if n == nil {
+			return false
+		}
+		return (n.Val == subRoot.Val && isSameTree(n, subRoot)) || dfs(n.Left) || dfs(n.Right)
 	}
-	if root == nil {
-		return false
-	}
-	if isSameTree(root, subRoot) {
-		return true
-	}
-	return isSameTree(root, subRoot) || isSubtree(root.Left, subRoot) || isSubtree(root.Right, subRoot)
+	return dfs(root)
 }
 
 func isSameTree(p *TreeNode, q *TreeNode) bool {
 	if p == nil && q == nil {
 		return true
 	}
-
-	if (p == nil && q != nil) || (p != nil && q == nil) {
+	if p == nil && q != nil {
+		return false
+	}
+	if p != nil && q == nil {
 		return false
 	}
 
-	if p.Val != q.Val {
-		return false
-	}
-
-	return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
+	return p.Val == q.Val && isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
 }
