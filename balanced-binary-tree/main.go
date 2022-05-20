@@ -18,24 +18,16 @@ func max(a, b int) int {
 }
 
 func isBalanced(root *TreeNode) bool {
-	if root == nil {
-		return true
+	var dfs func(n *TreeNode) int
+	dfs = func(n *TreeNode) int {
+		if n == nil {
+			return 0
+		}
+		l, r := dfs(n.Left), dfs(n.Right)
+		if l == -1 || r == -1 || math.Abs(float64(l)-float64(r)) > 1 {
+			return -1
+		}
+		return 1 + max(l, r)
 	}
-
 	return dfs(root) != -1
-}
-
-func dfs(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
-
-	left := dfs(root.Left)
-	right := dfs(root.Right)
-
-	if left == -1 || right == -1 || math.Abs(float64(left-right)) > 1 {
-		return -1
-	}
-
-	return 1 + max(left, right)
 }
