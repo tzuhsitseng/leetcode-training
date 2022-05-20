@@ -10,15 +10,25 @@ type TreeNode struct {
 
 func invertTree(root *TreeNode) *TreeNode {
 	if root == nil {
-		return nil
-	}
-
-	if root.Left == nil && root.Right == nil {
 		return root
 	}
 
-	l, r := root.Left, root.Right
-	root.Left = invertTree(r)
-	root.Right = invertTree(l)
+	var dfs func(n *TreeNode)
+	dfs = func(n *TreeNode) {
+		if n == nil {
+			return
+		}
+
+		n.Left, n.Right = n.Right, n.Left
+
+		if n.Left != nil {
+			dfs(n.Left)
+		}
+		if n.Right != nil {
+			dfs(n.Right)
+		}
+	}
+
+	dfs(root)
 	return root
 }
