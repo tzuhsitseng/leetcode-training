@@ -19,27 +19,23 @@ func NewTreeNodeQueue() *TreeNodeQueue {
 }
 
 func (q *TreeNodeQueue) enqueue(element *TreeNode) {
-	if q.queue == nil {
-		q.queue = make([]*TreeNode, 0)
-	}
 	q.queue = append(q.queue, element)
 }
 
 func (q *TreeNodeQueue) dequeue() *TreeNode {
-	if len(q.queue) == 0 {
+	if q.isEmpty() {
 		return nil
 	}
-	result := q.queue[0]
+	res := q.queue[0]
 	q.queue = q.queue[1:]
-	return result
+	return res
 }
 
 func (q *TreeNodeQueue) peek() *TreeNode {
-	if len(q.queue) == 0 {
+	if q.isEmpty() {
 		return nil
 	}
-	result := q.queue[0]
-	return result
+	return q.queue[0]
 }
 
 func (q *TreeNodeQueue) isEmpty() bool {
@@ -56,22 +52,23 @@ func levelOrder(root *TreeNode) [][]int {
 	q.enqueue(root)
 
 	for !q.isEmpty() {
-		items := make([]*TreeNode, 0)
-		values := make([]int, 0)
+		nodes := make([]*TreeNode, 0)
+		sub := make([]int, 0)
+
 		for !q.isEmpty() {
-			item := q.dequeue()
-			items = append(items, item)
-			values = append(values, item.Val)
+			nodes = append(nodes, q.dequeue())
 		}
-		for _, v := range items {
-			if v.Left != nil {
-				q.enqueue(v.Left)
+		for _, n := range nodes {
+			sub = append(sub, n.Val)
+			if n.Left != nil {
+				q.enqueue(n.Left)
 			}
-			if v.Right != nil {
-				q.enqueue(v.Right)
+			if n.Right != nil {
+				q.enqueue(n.Right)
 			}
 		}
-		res = append(res, values)
+
+		res = append(res, sub)
 	}
 
 	return res
