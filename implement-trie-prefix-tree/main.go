@@ -2,63 +2,61 @@ package main
 
 // https://leetcode.com/problems/implement-trie-prefix-tree/
 
+type TrieNode struct {
+	end      bool
+	children map[rune]*TrieNode
+}
+
 type Trie struct {
-	nodes map[rune]*Trie
+	root *TrieNode
 }
 
 func Constructor() Trie {
-	return Trie{nodes: map[rune]*Trie{}}
+	return Trie{
+		root: &TrieNode{
+			end:      false,
+			children: map[rune]*TrieNode{},
+		},
+	}
 }
 
 func (this *Trie) Insert(word string) {
-	iter := this
+	iter := this.root
 
-	for _, c := range word {
-		if iter.nodes == nil {
-			iter.nodes = map[rune]*Trie{}
+	for _, w := range word {
+		if iter.children == nil {
+			iter.children = map[rune]*TrieNode{}
 		}
-		if _, ok := iter.nodes[c]; !ok {
-			iter.nodes[c] = &Trie{}
+		if _, ok := iter.children[w]; !ok {
+			iter.children[w] = &TrieNode{}
 		}
-		iter = iter.nodes[c]
+		iter = iter.children[w]
 	}
 
-	if iter.nodes == nil {
-		iter.nodes = map[rune]*Trie{}
-	}
-	if _, ok := iter.nodes['#']; !ok {
-		iter.nodes['#'] = &Trie{}
-	}
+	iter.end = true
 }
 
 func (this *Trie) Search(word string) bool {
-	iter := this
+	iter := this.root
 
-	for _, c := range word {
-		if len(iter.nodes) == 0 {
+	for _, w := range word {
+		if _, ok := iter.children[w]; !ok {
 			return false
 		}
-		if _, ok := iter.nodes[c]; !ok {
-			return false
-		}
-		iter = iter.nodes[c]
+		iter = iter.children[w]
 	}
 
-	_, ok := iter.nodes['#']
-	return ok
+	return iter.end
 }
 
 func (this *Trie) StartsWith(prefix string) bool {
-	iter := this
+	iter := this.root
 
-	for _, c := range prefix {
-		if len(iter.nodes) == 0 {
+	for _, w := range prefix {
+		if _, ok := iter.children[w]; !ok {
 			return false
 		}
-		if _, ok := iter.nodes[c]; !ok {
-			return false
-		}
-		iter = iter.nodes[c]
+		iter = iter.children[w]
 	}
 
 	return true
