@@ -16,8 +16,13 @@ func max(a, b int) int {
 }
 
 func maxDepth(root *TreeNode) int {
-	if root == nil {
-		return 0
+	var dfs func(n *TreeNode) int
+	dfs = func(n *TreeNode) int {
+		if n == nil {
+			return 0
+		}
+		l, r := dfs(n.Left), dfs(n.Right)
+		return 1 + max(l, r)
 	}
-	return 1 + max(maxDepth(root.Left), maxDepth(root.Right))
+	return dfs(root)
 }
