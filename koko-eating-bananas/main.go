@@ -8,40 +8,46 @@ import (
 
 // https://leetcode.com/problems/koko-eating-bananas/
 
+func calculate(piles []int, k int) int {
+	res := 0
+	for _, p := range piles {
+		res += int(math.Ceil(float64(p) / float64(k)))
+	}
+	return res
+}
+
 func minEatingSpeed(piles []int, h int) int {
 	if h < len(piles) {
 		return -1
 	}
 
 	sort.Ints(piles)
+	max := piles[len(piles)-1]
 
-	l, r := 1, piles[len(piles)-1]
+	l, r := 1, max
 
 	for l <= r {
-		mid := (l + r) / 2
-		hr := getHours(piles, mid)
+		m := (l + r) / 2
+		need := calculate(piles, m)
 
-		if hr <= h {
-			if mid == 1 || getHours(piles, mid-1) > h {
-				return mid
+		if need <= h {
+			if m == 1 {
+				return m
 			}
-			r = mid - 1
+			need = calculate(piles, m-1)
+			if need > h {
+				return m
+			}
+			r = m - 1
 		} else {
-			l = mid + 1
+			l = m + 1
 		}
 	}
 
 	return -1
 }
 
-func getHours(piles []int, k int) int {
-	sum := 0
-	for _, v := range piles {
-		sum += int(math.Ceil(float64(v) / float64(k)))
-	}
-	return sum
-}
-
 func main() {
-	fmt.Println(minEatingSpeed([]int{3, 6, 7, 11}, 8))
+	//fmt.Println(minEatingSpeed([]int{3, 6, 7, 11}, 8))
+	fmt.Println(minEatingSpeed([]int{312884470}, 968709470))
 }
