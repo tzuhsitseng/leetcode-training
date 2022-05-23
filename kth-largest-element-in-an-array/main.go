@@ -9,17 +9,11 @@ import (
 
 type IntHeap []int
 
-func (h IntHeap) Len() int {
-	return len(h)
-}
+func (h IntHeap) Len() int { return len(h) }
 
-func (h IntHeap) Less(i, j int) bool {
-	return h[i] > h[j]
-}
+func (h IntHeap) Less(i, j int) bool { return h[i] > h[j] }
 
-func (h IntHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
-}
+func (h IntHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 
 func (h *IntHeap) Push(x interface{}) {
 	*h = append(*h, x.(int))
@@ -33,12 +27,21 @@ func (h *IntHeap) Pop() interface{} {
 }
 
 func findKthLargest(nums []int, k int) int {
-	h := IntHeap(nums)
+	if len(nums) == 1 {
+		return nums[0]
+	}
+
+	h := IntHeap{}
 	heap.Init(&h)
 
+	for _, n := range nums {
+		heap.Push(&h, n)
+	}
+
 	res := 0
-	for i := 0; i < k; i++ {
+	for k > 0 {
 		res = heap.Pop(&h).(int)
+		k--
 	}
 	return res
 }
