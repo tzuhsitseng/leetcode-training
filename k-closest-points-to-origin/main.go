@@ -12,25 +12,19 @@ type Point struct {
 	v int
 }
 
-type PointHeap []Point
+type PointPQ []Point
 
-func (h PointHeap) Len() int {
-	return len(h)
-}
+func (h PointPQ) Len() int { return len(h) }
 
-func (h PointHeap) Less(i, j int) bool {
-	return h[i].v < h[j].v
-}
+func (h PointPQ) Less(i, j int) bool { return h[i].v < h[j].v }
 
-func (h PointHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
-}
+func (h PointPQ) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 
-func (h *PointHeap) Push(x interface{}) {
+func (h *PointPQ) Push(x interface{}) {
 	*h = append(*h, x.(Point))
 }
 
-func (h *PointHeap) Pop() interface{} {
+func (h *PointPQ) Pop() interface{} {
 	l := len(*h)
 	res := (*h)[l-1]
 	*h = (*h)[:l-1]
@@ -38,26 +32,26 @@ func (h *PointHeap) Pop() interface{} {
 }
 
 func kClosest(points [][]int, k int) [][]int {
-	if len(points) == 0 {
-		return nil
+	if len(points) == 1 {
+		return points
 	}
 
-	h := PointHeap{}
-	heap.Init(&h)
+	pq := PointPQ{}
+	heap.Init(&pq)
 
 	for _, p := range points {
-		p1 := p[0]
-		p2 := p[1]
-		heap.Push(&h, Point{
+		heap.Push(&pq, Point{
 			p: p,
-			v: p1*p1 + p2*p2,
+			v: p[0]*p[0] + p[1]*p[1],
 		})
 	}
 
-	res := make([][]int, 0)
-	for i := 0; i < k; i++ {
-		p := heap.Pop(&h).(Point)
+	res := make([][]int, 0, k)
+
+	for k > 0 {
+		p := heap.Pop(&pq).(Point)
 		res = append(res, p.p)
+		k--
 	}
 
 	return res
