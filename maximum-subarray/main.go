@@ -10,18 +10,20 @@ func max(a, b int) int {
 }
 
 func maxSubArray(nums []int) int {
-	if len(nums) == 0 {
-		return 0
+	if len(nums) == 1 {
+		return nums[0]
 	}
-	maxSum, curSum := nums[0], 0
 
-	for _, v := range nums {
-		if curSum < 0 {
-			curSum = 0
+	res := nums[0]
+	sum := 0
+
+	for _, n := range nums {
+		if sum < 0 {
+			sum = 0
 		}
-		curSum += v
-		maxSum = max(curSum, maxSum)
+		sum += n
+		res = max(res, sum)
 	}
 
-	return maxSum
+	return res
 }
