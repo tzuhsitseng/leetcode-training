@@ -3,12 +3,8 @@ package main
 // https://leetcode.com/problems/subsets/
 
 func subsets(nums []int) [][]int {
-	if len(nums) == 0 {
-		return nil
-	}
-
-	cur := make([]int, 0)
 	res := make([][]int, 0)
+	cur := make([]int, 0)
 
 	var dfs func(idx int)
 	dfs = func(idx int) {
