@@ -10,17 +10,14 @@ func max(a, b int) int {
 }
 
 func canJump(nums []int) bool {
-	if len(nums) == 0 {
-		return false
-	}
+	furthest := nums[0]
 
-	furthest := 0
-
-	for i := 0; i < len(nums); i++ {
+	for i := 1; i < len(nums); i++ {
 		if furthest < i {
 			return false
 		}
 		furthest = max(furthest, i+nums[i])
 	}
+
 	return true
 }
