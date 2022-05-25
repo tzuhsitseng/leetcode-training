@@ -3,28 +3,23 @@ package main
 // https://leetcode.com/problems/min-cost-climbing-stairs/
 
 func min(a, b int) int {
-	if a < b {
-		return a
+	if a > b {
+		return b
 	}
-	return b
+	return a
 }
 
 func minCostClimbingStairs(cost []int) int {
-	l := len(cost)
-
-	if l == 0 {
-		return 0
-	} else if l == 1 {
-		return cost[0]
-	} else if l == 2 {
+	inputSize := len(cost)
+	if inputSize == 2 {
 		return min(cost[0], cost[1])
 	}
 
-	dp := make([]int, l+1)
-	dp[l] = 0
-	dp[l-1] = cost[l-1]
+	dp := make([]int, inputSize+1)
+	dp[inputSize] = 0
+	dp[inputSize-1] = cost[inputSize-1]
 
-	for i := l - 2; i >= 0; i-- {
+	for i := inputSize - 2; i >= 0; i-- {
 		dp[i] = min(dp[i+1], dp[i+2]) + cost[i]
 	}
 
