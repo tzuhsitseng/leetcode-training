@@ -10,29 +10,29 @@ func max(a, b int) int {
 }
 
 func rob(nums []int) int {
-	length := len(nums)
+	inputSize := len(nums)
 
-	if length == 0 {
-		return 0
-	}
-	if length == 1 {
+	if inputSize == 1 {
 		return nums[0]
 	}
 
-	dp1 := make([]int, length)
-	dp2 := make([]int, length)
+	dp := make([]int, inputSize)
+	dp[0] = nums[0]
+	dp[1] = nums[0]
 
-	dp1[0] = nums[0]
-	dp1[1] = dp1[0]
-	for i := 2; i < length-1; i++ {
-		dp1[i] = max(dp1[i-1], dp1[i-2]+nums[i])
+	for i := 2; i < inputSize-1; i++ {
+		dp[i] = max(dp[i-2]+nums[i], dp[i-1])
 	}
+	res1 := dp[inputSize-2]
 
-	dp2[0] = 0
-	dp2[1] = nums[1]
-	for i := 2; i < length; i++ {
-		dp2[i] = max(dp2[i-1], dp2[i-2]+nums[i])
+	dp = make([]int, inputSize)
+	dp[0] = 0
+	dp[1] = nums[1]
+
+	for i := 2; i < inputSize; i++ {
+		dp[i] = max(dp[i-2]+nums[i], dp[i-1])
 	}
+	res2 := dp[inputSize-1]
 
-	return max(dp1[length-2], dp2[length-1])
+	return max(res1, res2)
 }
