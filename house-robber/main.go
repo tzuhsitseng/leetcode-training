@@ -10,18 +10,17 @@ func max(a, b int) int {
 }
 
 func rob(nums []int) int {
-	size := len(nums)
-	if size == 1 {
+	if len(nums) == 1 {
 		return nums[0]
 	}
 
-	dp := make([]int, size)
+	dp := make([]int, len(nums))
 	dp[0] = nums[0]
-	dp[1] = max(dp[0], nums[1])
+	dp[1] = max(nums[0], nums[1])
 
-	for i := 2; i < size; i++ {
+	for i := 2; i < len(nums); i++ {
 		dp[i] = max(dp[i-1], dp[i-2]+nums[i])
 	}
 
-	return dp[size-1]
+	return dp[len(nums)-1]
 }
