@@ -17,17 +17,18 @@ func max(a, b int) int {
 }
 
 func maxProduct(nums []int) int {
-	res := -10 // constraints of question
-	curMin, curMax := 1, 1
+	if len(nums) == 1 {
+		return nums[0]
+	}
+
+	maxVal, minVal := 1, 1
+	res := 0
 
 	for _, n := range nums {
-		tmpMin := curMin
-		tmpMax := curMax
-		curMin = min(n, n*tmpMin)
-		curMin = min(curMin, n*tmpMax)
-		curMax = max(n, n*tmpMin)
-		curMax = max(curMax, n*tmpMax)
-		res = max(res, curMax)
+		tmpMax, tmpMin := maxVal, minVal
+		maxVal = max(max(n*tmpMax, n*tmpMin), n)
+		minVal = min(min(n*tmpMin, n*tmpMax), n)
+		res = max(res, maxVal)
 	}
 
 	return res
