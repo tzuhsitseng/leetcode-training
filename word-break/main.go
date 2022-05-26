@@ -3,34 +3,34 @@ package main
 // https://leetcode.com/problems/word-break/
 
 func wordBreak(s string, wordDict []string) bool {
-	dic := map[string]bool{}
-	for _, word := range wordDict {
-		dic[word] = true
+	dictMap := map[string]bool{}
+	dp := map[string]bool{}
+
+	for _, w := range wordDict {
+		dictMap[w] = true
 	}
 
-	mem := map[string]bool{}
-	var dfs func(sub string) bool
-	dfs = func(sub string) bool {
-		if sub == "" {
+	var dfs func(str string) bool
+	dfs = func(str string) bool {
+		if str == "" {
 			return true
 		}
 
-		if v, ok := mem[sub]; ok {
+		if v, ok := dp[str]; ok {
 			return v
 		}
 
-		for i := range sub {
-			if ok := dic[sub[:i+1]]; ok {
-				if dfs(sub[i+1:]) {
-					mem[sub[i+1:]] = true
+		for i := range str {
+			if _, ok := dictMap[str[:i+1]]; ok {
+				if dfs(str[i+1:]) {
+					dp[str] = true
 					return true
 				}
 			}
 		}
 
-		mem[sub] = false
+		dp[str] = false
 		return false
 	}
-
 	return dfs(s)
 }
