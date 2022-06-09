@@ -27,3 +27,26 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 
 	return dp[0][0]
 }
+
+// --
+// The following solution will be "Time Limit Exceeded", although it use cache
+// --
+
+//func longestCommonSubsequence(text1 string, text2 string) int {
+//	var dfs func(sub1, sub2 string) int
+//	dfs = func(sub1, sub2 string) int {
+//		if len(sub1) == 0 || len(sub2) == 0 {
+//			return 0
+//		}
+//
+//		if sub1[0] == sub2[0] {
+//			d := dfs(sub1[1:], sub2[1:])
+//			return 1 + d
+//		}
+//
+//		d1, d2 := dfs(sub1, sub2[1:]), dfs(sub1[1:], sub2)
+//		return max(d1, d2)
+//	}
+//
+//	return dfs(text1, text2)
+//}
