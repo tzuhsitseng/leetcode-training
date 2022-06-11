@@ -16,7 +16,7 @@ func maxProfit(prices []int) int {
 	l, r := 0, 1
 
 	for r < iSize {
-		if prices[l] < prices[r] {
+		if prices[l] > prices[r] {
 			l, r = r, r+1
 			continue
 		}
